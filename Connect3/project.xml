@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	
+	<meta title="Connect3" package="com.sample.connect3" version="1.0.0" company="vhlk" />
+	<app main="Main" path="Export" file="Connect3" />
+	
+	<source path="Source" />
+	
+	<haxelib name="openfl" />
+	
+	<assets path="Assets" rename="assets" />
+
+	<haxelib name="actuate" />
+
+	<haxelib name="haxeui-core" />
+	<haxelib name="haxeui-openfl" />
+	
+</project>
