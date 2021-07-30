@@ -3,8 +3,11 @@ import haxe.ds.Vector;
 class Test {
 	static function main() {
 		var mArray = new Vector(4);
-		for (i in 0...4)
-			mArray[i] = [];
+		mArray[0] = [new User(true),new User(false)];
+		mArray[1] = [new User(true)];
+		mArray[2] = [];
+		mArray[3] = [];
+
 		var nextPlay = minimaxDecision(mArray);
 		trace(nextPlay);
 	}
@@ -14,27 +17,27 @@ class Test {
 	}
 
 	static function maxValue(state:Vector<Array<User>>):NextMove {
-    for (i in state)
-        trace('${[for (j in i) j.user]}');
-    
-    trace("******");
 		var utility = terminalTest(state);
-		if (utility != -1)
+		if (utility != -1) {
 			return new NextMove(-1, utility);
+		}
 
-		var res = new NextMove(0, Math.NEGATIVE_INFINITY);
-		for (i in 0...state.length) {
-			var column = state[i];
+		var res = new NextMove(-2, Math.NEGATIVE_INFINITY);
+		for (i in 0 ... state.length) {
+			var column = state[i].copy();
+			// trace('column: ${[for (elem in column) elem.user]}');
 
 			if (column.length < 3) {
 				column.push(new User(false));
 				var nextState = state.copy();
 				nextState[i] = column;
 				var minV = minValue(nextState);
+				// trace('column: ${i+1}, value: ${minV}');
                 if (minV > res.value)
                     res = new NextMove(i, minV);
 			}
 		}
+		// trace("****");
 
 		return res;
 	}
@@ -45,14 +48,15 @@ class Test {
 			return utility;
 
 		var res = Math.POSITIVE_INFINITY;
-		for (i in 0...state.length) {
-			var column = state[i];
+		for (i in 0 ... state.length) {
+			var column = state[i].copy();
 
 			if (column.length < 3) {
 				column.push(new User(true));
 				var nextState = state.copy();
 				nextState[i] = column;
-				res = Math.min(res, maxValue(nextState).value);
+				var maxV = maxValue(nextState).value;
+				res = Math.min(res, maxV);
 			}
 		}
 
@@ -60,8 +64,8 @@ class Test {
 	}
 
 	static function terminalTest(state:Vector<Array<User>>):Float {
-		for (i in 0...state.length) {
-			var column = state[i];
+		for (i in 0 ... state.length) {
+			var column = state[i].copy();
 
 			// ver caso tenha completado o jogo na vertical
 			if (column.length == 3) {
@@ -96,7 +100,7 @@ class Test {
 			if (state[0].length == 3 && state[0][2].user == midUser && state[2].length > 0 && state[2][0].user == midUser)
 				midUser ? return Math.NEGATIVE_INFINITY : return Math.POSITIVE_INFINITY;
 		} else if (state[2].length > 1) {
-			var midUser = state[2][2].user;
+			var midUser = state[2][1].user;
 			if (state[1].length > 0 && state[1][0].user == midUser && state[3].length == 3 && state[3][2].user == midUser)
 				midUser ? return Math.NEGATIVE_INFINITY : return Math.POSITIVE_INFINITY;
 

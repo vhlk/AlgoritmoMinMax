@@ -1,5 +1,6 @@
 package;
 
+import sys.thread.Thread;
 import motion.Actuate;
 import openfl.display.Bitmap;
 import openfl.display.Sprite;
@@ -15,13 +16,8 @@ class Main extends Sprite
 	{
 		super();
 
-		var columnsIndex = new Vector<Int>(4);
-		for (i in 0 ... 4) {
-			columnsIndex[i] = 3;
-		}
-
-		var allMoves:Array<Array<User>> = [];
-		for (i in 0 ... 4) allMoves.push([]);
+		var allMoves:Vector<Array<User>> = new Vector(4);
+		for (i in 0 ... allMoves.length) allMoves[i] = [];
 
 		var wireframeData = Assets.getBitmapData("assets/wireframe.png");
 		var wireframe = new Bitmap(wireframeData);
@@ -40,19 +36,65 @@ class Main extends Sprite
 			btn.x = calculateBtnPos(i, btn);
 			btn.y = 20;
 			btn.onClick = function(e) {
-				if (columnsIndex[i-1] < 1) return;
+				var index = i-1;
+				if (allMoves[index].length > 2) return;
 
-				var redDiscData = Assets.getBitmapData("assets/black_disc.png");
-				var redDisc = new Bitmap(redDiscData);
-				addChild(redDisc);
-				redDisc.smoothing = true;
-				redDisc.width = stage.stageWidth/4 - 20;
-				redDisc.height = stage.stageWidth/4 - 20;
-				redDisc.x = calculateDiscX(i, redDisc);
-				Actuate.tween(redDisc, 3, {y: calculateDiscY(columnsIndex[i-1], redDisc)});
-				columnsIndex[i-1]--;
+				putDisc(index, allMoves);			
+
+				// little delay so user can see his move
+				trace('coluna == ${i}');
+				trace('allMoves: ${[for (i in 0 ... allMoves.length) [for (user in allMoves[i]) user.user]]}');
+				var decision = MinMax.minimaxDecision(allMoves);
+				if (decision == -1) {
+					var wireframeData = Assets.getBitmapData("assets/wireframe.png");
+					var wireframe = new Bitmap(wireframeData);
+					addChild(wireframe);
+					wireframe.smoothing = true;
+					wireframe.width = stage.stageWidth;
+					wireframe.height = stage.stageHeight-50;
+					wireframe.y = 50;
+				}
+				else {
+					if (decision == -2) {
+						for (i in 0 ... allMoves.length) {
+							var positions = allMoves[i];
+							if (positions.length < 3) {
+								putIADisc(i, allMoves);
+								break;
+							}
+						}
+					} else {
+						putIADisc(decision, allMoves);
+					}
+				}
+				trace('decision: ${decision}');
 			}
 		}
+	}
+
+	function putIADisc(index:Int, allMoves:Vector<Array<User>>) {
+		Thread.create(() -> {
+			Sys.sleep(1);				
+			putDisc(index, allMoves, false);
+		});
+	}
+
+	function putDisc(index:Int, allMoves:Vector<Array<User>>, userDisc:Bool=true) {
+		var discData = Assets.getBitmapData("assets/black_disc.png");
+		var disc = new Bitmap(discData);
+
+		if (!userDisc) {
+			discData = Assets.getBitmapData("assets/red_disc.png");
+			disc = new Bitmap(discData);
+		}
+
+		addChild(disc);
+		disc.smoothing = true;
+		disc.width = stage.stageWidth/4 - 20;
+		disc.height = stage.stageWidth/4 - 20;
+		disc.x = calculateDiscX(index+1, disc);
+		Actuate.tween(disc, 3, {y: calculateDiscY(3-allMoves[index].length, disc)});
+		allMoves[index].push(new User(userDisc));
 	}
 
 	function calculateDiscX(column: Int, disc:Bitmap) {
