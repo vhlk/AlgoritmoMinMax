@@ -20,7 +20,7 @@ class Main extends Sprite
 			columnsIndex[i] = 3;
 		}
 
-		var allMoves:Array<Array<Moves>> = [];
+		var allMoves:Array<Array<User>> = [];
 		for (i in 0 ... 4) allMoves.push([]);
 
 		var wireframeData = Assets.getBitmapData("assets/wireframe.png");
