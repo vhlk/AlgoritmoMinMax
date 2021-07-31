@@ -1,6 +1,8 @@
 package;
 
+#if !js
 import sys.thread.Thread;
+#end
 import motion.Actuate;
 import openfl.display.Bitmap;
 import openfl.display.Sprite;
@@ -87,11 +89,16 @@ class Main extends Sprite
 	}
 
 	function putIADisc(index:Int, allMoves:Vector<Array<User>>) {
+#if !js
 		Thread.create(() -> {
 			Sys.sleep(1);				
 			putDisc(index, allMoves, false);
 			drawIfTerminal(allMoves);
 		});
+#else
+		putDisc(index, allMoves, false);
+		drawIfTerminal(allMoves);
+#end
 	}
 
 	function putDisc(index:Int, allMoves:Vector<Array<User>>, userDisc:Bool=true) {
@@ -105,8 +112,9 @@ class Main extends Sprite
 
 		addChild(disc);
 		disc.smoothing = true;
-		disc.width = stage.stageWidth/4 - 20;
-		disc.height = stage.stageWidth/4 - 20;
+		var minWidthHeight = Math.min(stage.stageWidth, stage.stageHeight);
+		disc.width = minWidthHeight/4;
+		disc.height = minWidthHeight/4;
 		disc.x = calculateDiscX(index+1, disc);
 		Actuate.tween(disc, 3, {y: calculateDiscY(3-allMoves[index].length, disc)});
 		allMoves[index].push(new User(userDisc));
