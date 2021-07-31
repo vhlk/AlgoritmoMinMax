@@ -8,6 +8,7 @@ import openfl.Assets;
 import haxe.ui.Toolkit;
 import haxe.ui.components.Button;
 import haxe.ds.Vector;
+import haxe.ui.styles.Style;
 
 class Main extends Sprite
 {
@@ -35,6 +36,13 @@ class Main extends Sprite
 			addChild(btn);
 			btn.x = calculateBtnPos(i, btn);
 			btn.y = 20;
+			btn.styleString = "
+			background: #79bbff;
+			border: 3px solid #337bc4;
+			border-radius:10px;
+			padding:8px 10px;
+			font-size: 14px;
+			color: #212121;";
 			btn.onClick = function(e) {
 				var index = i-1;
 				if (allMoves[index].length > 2) return;
@@ -42,33 +50,39 @@ class Main extends Sprite
 				putDisc(index, allMoves);			
 
 				// little delay so user can see his move
-				trace('coluna == ${i}');
-				trace('allMoves: ${[for (i in 0 ... allMoves.length) [for (user in allMoves[i]) user.user]]}');
+				// trace('coluna == ${i}');
+				// trace('allMoves: ${[for (i in 0 ... allMoves.length) [for (user in allMoves[i]) user.user]]}');
 				var decision = MinMax.minimaxDecision(allMoves);
-				if (decision == -1) {
-					var wireframeData = Assets.getBitmapData("assets/wireframe.png");
-					var wireframe = new Bitmap(wireframeData);
-					addChild(wireframe);
-					wireframe.smoothing = true;
-					wireframe.width = stage.stageWidth;
-					wireframe.height = stage.stageHeight-50;
-					wireframe.y = 50;
-				}
-				else {
-					if (decision == -2) {
-						for (i in 0 ... allMoves.length) {
-							var positions = allMoves[i];
-							if (positions.length < 3) {
-								putIADisc(i, allMoves);
-								break;
-							}
+				if (decision == -1)
+					drawIfTerminal(allMoves);
+				else if (decision == -2) {
+					for (i in 0 ... allMoves.length) {
+						var positions = allMoves[i];
+						if (positions.length < 3) {
+							putIADisc(i, allMoves);
+							break;
 						}
-					} else {
-						putIADisc(decision, allMoves);
 					}
-				}
+				} else {
+					putIADisc(decision, allMoves);
+				}				
 				trace('decision: ${decision}');
 			}
+		}
+	}
+
+	function drawIfTerminal(allMoves:Vector<Array<User>>) {
+		var terminalTest = MinMax.terminalTest(allMoves);
+		if (terminalTest != -1) {
+			var wireframeData = Assets.getBitmapData("assets/winMsg.png");
+			if (terminalTest == Math.POSITIVE_INFINITY) {
+				wireframeData = Assets.getBitmapData("assets/loseMsg.png");
+			}
+			var wireframe = new Bitmap(wireframeData);
+			addChild(wireframe);
+			wireframe.smoothing = true;
+			wireframe.width = stage.stageWidth;
+			wireframe.height = stage.stageHeight;
 		}
 	}
 
@@ -76,6 +90,7 @@ class Main extends Sprite
 		Thread.create(() -> {
 			Sys.sleep(1);				
 			putDisc(index, allMoves, false);
+			drawIfTerminal(allMoves);
 		});
 	}
 

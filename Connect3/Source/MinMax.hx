@@ -51,7 +51,7 @@ class MinMax {
 		return res;
 	}
 
-	private static function terminalTest(state:Vector<Array<User>>):Float {
+	public static function terminalTest(state:Vector<Array<User>>):Float {
 		for (i in 0 ... state.length) {
 			var column = state[i].copy();
 
