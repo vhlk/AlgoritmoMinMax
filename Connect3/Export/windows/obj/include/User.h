@@ -59,6 +59,9 @@ HXDLIN(   5)		( ( ::User)(__this) )->user = isUser;
 		::String __ToString() const { return HX_("User",6b,be,86,38); }
 
 		bool user;
+		virtual ::String toString();
+		::Dynamic toString_dyn();
+
 };
 
 

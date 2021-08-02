@@ -51,17 +51,20 @@ class HXCPP_CLASS_ATTRIBUTES MinMax_obj : public ::hx::Object
 		bool _hx_isInstanceOf(int inClassId);
 		::String __ToString() const { return HX_("MinMax",52,ec,7d,87); }
 
-		static int minimaxDecision(::Array< ::Dynamic> state);
+		static int minimaxDecision(::Array< ::Dynamic> state,::hx::Null< int >  depth);
 		static ::Dynamic minimaxDecision_dyn();
 
-		static  ::NextMove maxValue(::Array< ::Dynamic> state);
+		static  ::NextMove maxValue(::Array< ::Dynamic> state,int targetDepth,int currDepth);
 		static ::Dynamic maxValue_dyn();
 
-		static Float minValue(::Array< ::Dynamic> state);
+		static Float minValue(::Array< ::Dynamic> state,int targetDepth,int currDepth);
 		static ::Dynamic minValue_dyn();
 
 		static Float terminalTest(::Array< ::Dynamic> state);
 		static ::Dynamic terminalTest_dyn();
+
+		static Float heuristic(::Array< ::Dynamic> state);
+		static ::Dynamic heuristic_dyn();
 
 };
 

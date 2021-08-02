@@ -6,6 +6,7 @@
 #endif
 
 HX_DEFINE_STACK_FRAME(_hx_pos_e9a77c089f21b886_5_new,"User","new",0xd05970dd,"User.new","User.hx",5,0x3ca11933)
+HX_LOCAL_STACK_FRAME(_hx_pos_e9a77c089f21b886_9_toString,"User","toString",0x4aa14b0f,"User.toString","User.hx",9,0x3ca11933)
 
 void User_obj::__construct(::hx::Null< bool >  __o_isUser){
             		bool isUser = __o_isUser.Default(false);
@@ -28,6 +29,20 @@ bool User_obj::_hx_isInstanceOf(int inClassId) {
 	return inClassId==(int)0x00000001 || inClassId==(int)0x0cd9b48f;
 }
 
+::String User_obj::toString(){
+            	HX_STACKFRAME(&_hx_pos_e9a77c089f21b886_9_toString)
+HXDLIN(   9)		if (this->user) {
+HXLINE(  10)			return HX_("User",6b,be,86,38);
+            		}
+            		else {
+HXLINE(  13)			return HX_("AI",e8,38,00,00);
+            		}
+HXLINE(   9)		return null();
+            	}
+
+
+HX_DEFINE_DYNAMIC_FUNC0(User_obj,toString,return )
+
 
 User_obj::User_obj()
 {
@@ -38,6 +53,9 @@ User_obj::User_obj()
 	switch(inName.length) {
 	case 4:
 		if (HX_FIELD_EQ(inName,"user") ) { return ::hx::Val( user ); }
+		break;
+	case 8:
+		if (HX_FIELD_EQ(inName,"toString") ) { return ::hx::Val( toString_dyn() ); }
 	}
 	return super::__Field(inName,inCallProp);
 }
@@ -67,6 +85,7 @@ static ::hx::StaticInfo *User_obj_sStaticStorageInfo = 0;
 
 static ::String User_obj_sMemberFields[] = {
 	HX_("user",4b,92,ad,4d),
+	HX_("toString",ac,d0,6e,38),
 	::String(null()) };
 
 ::hx::Class User_obj::__mClass;

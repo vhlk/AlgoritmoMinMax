@@ -173,7 +173,7 @@ HXLINE(  50)					if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(allMoves,inde
 HXLINE(  50)						return;
             					}
 HXLINE(  52)					_gthis->putDisc(index,allMoves,null());
-HXLINE(  57)					int decision = ::MinMax_obj::minimaxDecision(allMoves);
+HXLINE(  57)					int decision = ::MinMax_obj::minimaxDecision(allMoves,null());
 HXLINE(  58)					if ((decision == -1)) {
 HXLINE(  59)						_gthis->drawIfTerminal(allMoves);
             					}

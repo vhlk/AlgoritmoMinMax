@@ -6,7 +6,7 @@
 #include <hxcpp.h>
 #endif
 
-HX_DECLARE_STACK_FRAME(_hx_pos_b2de0c04482600c2_107_new)
+HX_DECLARE_STACK_FRAME(_hx_pos_b2de0c04482600c2_163_new)
 HX_DECLARE_CLASS0(NextMove)
 
 
@@ -37,9 +37,9 @@ class HXCPP_CLASS_ATTRIBUTES NextMove_obj : public ::hx::Object
 			NextMove_obj *__this = (NextMove_obj*)(::hx::Ctx::alloc(_hx_ctx, sizeof(NextMove_obj), false, "NextMove"));
 			*(void **)__this = NextMove_obj::_hx_vtable;
 {
-            	HX_STACKFRAME(&_hx_pos_b2de0c04482600c2_107_new)
-HXLINE( 108)		( ( ::NextMove)(__this) )->column = column;
-HXLINE( 109)		( ( ::NextMove)(__this) )->value = value;
+            	HX_STACKFRAME(&_hx_pos_b2de0c04482600c2_163_new)
+HXLINE( 164)		( ( ::NextMove)(__this) )->column = column;
+HXLINE( 165)		( ( ::NextMove)(__this) )->value = value;
             	}
 		
 			return __this;

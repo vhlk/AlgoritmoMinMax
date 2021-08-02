@@ -15,10 +15,11 @@
 #include <User.h>
 #endif
 
-HX_LOCAL_STACK_FRAME(_hx_pos_0c24820382934f49_5_minimaxDecision,"MinMax","minimaxDecision",0x5878608d,"MinMax.minimaxDecision","MinMax.hx",5,0xb95455ac)
-HX_LOCAL_STACK_FRAME(_hx_pos_0c24820382934f49_8_maxValue,"MinMax","maxValue",0x2275a9c9,"MinMax.maxValue","MinMax.hx",8,0xb95455ac)
-HX_LOCAL_STACK_FRAME(_hx_pos_0c24820382934f49_34_minValue,"MinMax","minValue",0x6f8fc41b,"MinMax.minValue","MinMax.hx",34,0xb95455ac)
-HX_LOCAL_STACK_FRAME(_hx_pos_0c24820382934f49_54_terminalTest,"MinMax","terminalTest",0x136c598a,"MinMax.terminalTest","MinMax.hx",54,0xb95455ac)
+HX_LOCAL_STACK_FRAME(_hx_pos_0c24820382934f49_6_minimaxDecision,"MinMax","minimaxDecision",0x5878608d,"MinMax.minimaxDecision","MinMax.hx",6,0xb95455ac)
+HX_LOCAL_STACK_FRAME(_hx_pos_0c24820382934f49_9_maxValue,"MinMax","maxValue",0x2275a9c9,"MinMax.maxValue","MinMax.hx",9,0xb95455ac)
+HX_LOCAL_STACK_FRAME(_hx_pos_0c24820382934f49_38_minValue,"MinMax","minValue",0x6f8fc41b,"MinMax.minValue","MinMax.hx",38,0xb95455ac)
+HX_LOCAL_STACK_FRAME(_hx_pos_0c24820382934f49_61_terminalTest,"MinMax","terminalTest",0x136c598a,"MinMax.terminalTest","MinMax.hx",61,0xb95455ac)
+HX_LOCAL_STACK_FRAME(_hx_pos_0c24820382934f49_109_heuristic,"MinMax","heuristic",0x1fa3bbae,"MinMax.heuristic","MinMax.hx",109,0xb95455ac)
 
 void MinMax_obj::__construct() { }
 
@@ -37,138 +38,159 @@ bool MinMax_obj::_hx_isInstanceOf(int inClassId) {
 	return inClassId==(int)0x00000001 || inClassId==(int)0x4f15b376;
 }
 
-int MinMax_obj::minimaxDecision(::Array< ::Dynamic> state){
-            	HX_STACKFRAME(&_hx_pos_0c24820382934f49_5_minimaxDecision)
-HXDLIN(   5)		return ::MinMax_obj::maxValue(state)->column;
+int MinMax_obj::minimaxDecision(::Array< ::Dynamic> state,::hx::Null< int >  __o_depth){
+            		int depth = __o_depth.Default(2);
+            	HX_STACKFRAME(&_hx_pos_0c24820382934f49_6_minimaxDecision)
+HXDLIN(   6)		return ::MinMax_obj::maxValue(state,depth,0)->column;
             	}
 
 
-STATIC_HX_DEFINE_DYNAMIC_FUNC1(MinMax_obj,minimaxDecision,return )
+STATIC_HX_DEFINE_DYNAMIC_FUNC2(MinMax_obj,minimaxDecision,return )
 
- ::NextMove MinMax_obj::maxValue(::Array< ::Dynamic> state){
-            	HX_GC_STACKFRAME(&_hx_pos_0c24820382934f49_8_maxValue)
-HXLINE(   9)		Float utility = ::MinMax_obj::terminalTest(state);
-HXLINE(  10)		if ((utility != -1)) {
-HXLINE(  11)			return  ::NextMove_obj::__alloc( HX_CTX ,-1,utility);
+ ::NextMove MinMax_obj::maxValue(::Array< ::Dynamic> state,int targetDepth,int currDepth){
+            	HX_GC_STACKFRAME(&_hx_pos_0c24820382934f49_9_maxValue)
+HXLINE(  10)		Float utility = ::MinMax_obj::terminalTest(state);
+HXLINE(  11)		if ((utility != -1)) {
+HXLINE(  12)			return  ::NextMove_obj::__alloc( HX_CTX ,-1,utility);
             		}
-HXLINE(  14)		 ::NextMove res =  ::NextMove_obj::__alloc( HX_CTX ,-2,::Math_obj::NEGATIVE_INFINITY);
-HXLINE(  15)		{
-HXLINE(  15)			int _g = 0;
-HXDLIN(  15)			int _g1 = state->length;
-HXDLIN(  15)			while((_g < _g1)){
-HXLINE(  15)				_g = (_g + 1);
-HXDLIN(  15)				int i = (_g - 1);
-HXLINE(  16)				::Array< ::Dynamic> column = ( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,i)) )->copy();
-HXLINE(  19)				if ((column->length < 3)) {
-HXLINE(  20)					column->push( ::User_obj::__alloc( HX_CTX ,false));
-HXLINE(  21)					::Array< ::Dynamic> this1 = ::Array_obj< ::Dynamic>::__new(state->length);
-HXDLIN(  21)					::Array< ::Dynamic> r = this1;
-HXDLIN(  21)					r->blit(0,state,0,state->length);
-HXDLIN(  21)					::Array< ::Dynamic> nextState = r;
-HXLINE(  22)					nextState->__unsafe_set(i,column);
-HXLINE(  23)					Float minV = ::MinMax_obj::minValue(nextState);
-HXLINE(  25)					if ((minV > res->value)) {
-HXLINE(  26)						res =  ::NextMove_obj::__alloc( HX_CTX ,i,minV);
+HXLINE(  15)		bool _hx_tmp;
+HXDLIN(  15)		if ((targetDepth != -1)) {
+HXLINE(  15)			_hx_tmp = (currDepth == targetDepth);
+            		}
+            		else {
+HXLINE(  15)			_hx_tmp = false;
+            		}
+HXDLIN(  15)		if (_hx_tmp) {
+HXLINE(  16)			return  ::NextMove_obj::__alloc( HX_CTX ,-3,::MinMax_obj::heuristic(state));
+            		}
+HXLINE(  18)		 ::NextMove res =  ::NextMove_obj::__alloc( HX_CTX ,-2,::Math_obj::NEGATIVE_INFINITY);
+HXLINE(  19)		{
+HXLINE(  19)			int _g = 0;
+HXDLIN(  19)			int _g1 = state->length;
+HXDLIN(  19)			while((_g < _g1)){
+HXLINE(  19)				_g = (_g + 1);
+HXDLIN(  19)				int i = (_g - 1);
+HXLINE(  20)				::Array< ::Dynamic> column = ( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,i)) )->copy();
+HXLINE(  23)				if ((column->length < 3)) {
+HXLINE(  24)					column->push( ::User_obj::__alloc( HX_CTX ,false));
+HXLINE(  25)					::Array< ::Dynamic> this1 = ::Array_obj< ::Dynamic>::__new(state->length);
+HXDLIN(  25)					::Array< ::Dynamic> r = this1;
+HXDLIN(  25)					r->blit(0,state,0,state->length);
+HXDLIN(  25)					::Array< ::Dynamic> nextState = r;
+HXLINE(  26)					nextState->__unsafe_set(i,column);
+HXLINE(  27)					Float minV = ::MinMax_obj::minValue(nextState,targetDepth,(currDepth + 1));
+HXLINE(  29)					if ((minV > res->value)) {
+HXLINE(  30)						res =  ::NextMove_obj::__alloc( HX_CTX ,i,minV);
             					}
             				}
             			}
             		}
-HXLINE(  31)		return res;
+HXLINE(  35)		return res;
             	}
 
 
-STATIC_HX_DEFINE_DYNAMIC_FUNC1(MinMax_obj,maxValue,return )
+STATIC_HX_DEFINE_DYNAMIC_FUNC3(MinMax_obj,maxValue,return )
 
-Float MinMax_obj::minValue(::Array< ::Dynamic> state){
-            	HX_GC_STACKFRAME(&_hx_pos_0c24820382934f49_34_minValue)
-HXLINE(  35)		Float utility = ::MinMax_obj::terminalTest(state);
-HXLINE(  36)		if ((utility != -1)) {
-HXLINE(  37)			return utility;
+Float MinMax_obj::minValue(::Array< ::Dynamic> state,int targetDepth,int currDepth){
+            	HX_GC_STACKFRAME(&_hx_pos_0c24820382934f49_38_minValue)
+HXLINE(  39)		Float utility = ::MinMax_obj::terminalTest(state);
+HXLINE(  40)		if ((utility != -1)) {
+HXLINE(  41)			return utility;
             		}
-HXLINE(  39)		Float res = ::Math_obj::POSITIVE_INFINITY;
-HXLINE(  40)		{
-HXLINE(  40)			int _g = 0;
-HXDLIN(  40)			int _g1 = state->length;
-HXDLIN(  40)			while((_g < _g1)){
-HXLINE(  40)				_g = (_g + 1);
-HXDLIN(  40)				int i = (_g - 1);
-HXLINE(  41)				::Array< ::Dynamic> column = ( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,i)) )->copy();
-HXLINE(  43)				if ((column->length < 3)) {
-HXLINE(  44)					column->push( ::User_obj::__alloc( HX_CTX ,true));
-HXLINE(  45)					::Array< ::Dynamic> this1 = ::Array_obj< ::Dynamic>::__new(state->length);
-HXDLIN(  45)					::Array< ::Dynamic> r = this1;
-HXDLIN(  45)					r->blit(0,state,0,state->length);
-HXDLIN(  45)					::Array< ::Dynamic> nextState = r;
-HXLINE(  46)					nextState->__unsafe_set(i,column);
-HXLINE(  47)					res = ::Math_obj::min(res,::MinMax_obj::maxValue(nextState)->value);
+HXLINE(  43)		bool _hx_tmp;
+HXDLIN(  43)		if ((targetDepth != -1)) {
+HXLINE(  43)			_hx_tmp = (currDepth == targetDepth);
+            		}
+            		else {
+HXLINE(  43)			_hx_tmp = false;
+            		}
+HXDLIN(  43)		if (_hx_tmp) {
+HXLINE(  44)			return ::MinMax_obj::heuristic(state);
+            		}
+HXLINE(  46)		Float res = ::Math_obj::POSITIVE_INFINITY;
+HXLINE(  47)		{
+HXLINE(  47)			int _g = 0;
+HXDLIN(  47)			int _g1 = state->length;
+HXDLIN(  47)			while((_g < _g1)){
+HXLINE(  47)				_g = (_g + 1);
+HXDLIN(  47)				int i = (_g - 1);
+HXLINE(  48)				::Array< ::Dynamic> column = ( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,i)) )->copy();
+HXLINE(  50)				if ((column->length < 3)) {
+HXLINE(  51)					column->push( ::User_obj::__alloc( HX_CTX ,true));
+HXLINE(  52)					::Array< ::Dynamic> this1 = ::Array_obj< ::Dynamic>::__new(state->length);
+HXDLIN(  52)					::Array< ::Dynamic> r = this1;
+HXDLIN(  52)					r->blit(0,state,0,state->length);
+HXDLIN(  52)					::Array< ::Dynamic> nextState = r;
+HXLINE(  53)					nextState->__unsafe_set(i,column);
+HXLINE(  54)					res = ::Math_obj::min(res,::MinMax_obj::maxValue(nextState,targetDepth,(currDepth + 1))->value);
             				}
             			}
             		}
-HXLINE(  51)		return res;
+HXLINE(  58)		return res;
             	}
 
 
-STATIC_HX_DEFINE_DYNAMIC_FUNC1(MinMax_obj,minValue,return )
+STATIC_HX_DEFINE_DYNAMIC_FUNC3(MinMax_obj,minValue,return )
 
 Float MinMax_obj::terminalTest(::Array< ::Dynamic> state){
-            	HX_STACKFRAME(&_hx_pos_0c24820382934f49_54_terminalTest)
-HXLINE(  55)		{
-HXLINE(  55)			int _g = 0;
-HXDLIN(  55)			int _g1 = state->length;
-HXDLIN(  55)			while((_g < _g1)){
-HXLINE(  55)				_g = (_g + 1);
-HXDLIN(  55)				int i = (_g - 1);
-HXLINE(  56)				::Array< ::Dynamic> column = ( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,i)) )->copy();
-HXLINE(  59)				if ((column->length == 3)) {
-HXLINE(  60)					::Array< ::Dynamic> _g = ::Array_obj< ::Dynamic>::__new(0);
-HXDLIN(  60)					{
-HXLINE(  60)						int _g1 = 0;
-HXDLIN(  60)						::Array< ::Dynamic> _g2 = column;
-HXDLIN(  60)						while((_g1 < _g2->length)){
-HXLINE(  60)							 ::User v = _g2->__get(_g1).StaticCast<  ::User >();
-HXDLIN(  60)							_g1 = (_g1 + 1);
-HXDLIN(  60)							if ((v->user == true)) {
-HXLINE(  60)								_g->push(v);
+            	HX_STACKFRAME(&_hx_pos_0c24820382934f49_61_terminalTest)
+HXLINE(  62)		{
+HXLINE(  62)			int _g = 0;
+HXDLIN(  62)			int _g1 = state->length;
+HXDLIN(  62)			while((_g < _g1)){
+HXLINE(  62)				_g = (_g + 1);
+HXDLIN(  62)				int i = (_g - 1);
+HXLINE(  63)				::Array< ::Dynamic> column = ( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,i)) )->copy();
+HXLINE(  66)				if ((column->length == 3)) {
+HXLINE(  67)					::Array< ::Dynamic> _g = ::Array_obj< ::Dynamic>::__new(0);
+HXDLIN(  67)					{
+HXLINE(  67)						int _g1 = 0;
+HXDLIN(  67)						::Array< ::Dynamic> _g2 = column;
+HXDLIN(  67)						while((_g1 < _g2->length)){
+HXLINE(  67)							 ::User v = _g2->__get(_g1).StaticCast<  ::User >();
+HXDLIN(  67)							_g1 = (_g1 + 1);
+HXDLIN(  67)							if ((v->user == true)) {
+HXLINE(  67)								_g->push(v);
             							}
             						}
             					}
-HXDLIN(  60)					::Array< ::Dynamic> userMoves = _g;
-HXLINE(  61)					if ((userMoves->length == 3)) {
-HXLINE(  62)						return ::Math_obj::NEGATIVE_INFINITY;
+HXDLIN(  67)					::Array< ::Dynamic> userMoves = _g;
+HXLINE(  68)					if ((userMoves->length == 3)) {
+HXLINE(  69)						return ::Math_obj::NEGATIVE_INFINITY;
             					}
-HXLINE(  64)					int iaMoves = (column->length - userMoves->length);
-HXLINE(  65)					if ((iaMoves == 3)) {
-HXLINE(  66)						return ::Math_obj::POSITIVE_INFINITY;
+HXLINE(  71)					int iaMoves = (column->length - userMoves->length);
+HXLINE(  72)					if ((iaMoves == 3)) {
+HXLINE(  73)						return ::Math_obj::POSITIVE_INFINITY;
             					}
             				}
-HXLINE(  70)				if ((i <= 1)) {
-HXLINE(  71)					int _g = 0;
-HXDLIN(  71)					int _g1 = column->length;
-HXDLIN(  71)					while((_g < _g1)){
-HXLINE(  71)						_g = (_g + 1);
-HXDLIN(  71)						int j = (_g - 1);
-HXLINE(  72)						bool elemUser = ( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,i)) )->__get(j).StaticCast<  ::User >()->user;
-HXLINE(  73)						bool _hx_tmp;
-HXDLIN(  73)						if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,(i + 1))) )->length > j)) {
-HXLINE(  73)							_hx_tmp = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,(i + 1))) )->__get(j).StaticCast<  ::User >()->user == elemUser);
+HXLINE(  77)				if ((i <= 1)) {
+HXLINE(  78)					int _g = 0;
+HXDLIN(  78)					int _g1 = column->length;
+HXDLIN(  78)					while((_g < _g1)){
+HXLINE(  78)						_g = (_g + 1);
+HXDLIN(  78)						int j = (_g - 1);
+HXLINE(  79)						bool elemUser = ( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,i)) )->__get(j).StaticCast<  ::User >()->user;
+HXLINE(  80)						bool _hx_tmp;
+HXDLIN(  80)						if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,(i + 1))) )->length > j)) {
+HXLINE(  80)							_hx_tmp = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,(i + 1))) )->__get(j).StaticCast<  ::User >()->user == elemUser);
             						}
             						else {
-HXLINE(  73)							_hx_tmp = false;
+HXLINE(  80)							_hx_tmp = false;
             						}
-HXDLIN(  73)						if (_hx_tmp) {
-HXLINE(  74)							bool _hx_tmp;
-HXDLIN(  74)							if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,(i + 2))) )->length > j)) {
-HXLINE(  74)								_hx_tmp = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,(i + 2))) )->__get(j).StaticCast<  ::User >()->user == elemUser);
+HXDLIN(  80)						if (_hx_tmp) {
+HXLINE(  81)							bool _hx_tmp;
+HXDLIN(  81)							if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,(i + 2))) )->length > j)) {
+HXLINE(  81)								_hx_tmp = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,(i + 2))) )->__get(j).StaticCast<  ::User >()->user == elemUser);
             							}
             							else {
-HXLINE(  74)								_hx_tmp = false;
+HXLINE(  81)								_hx_tmp = false;
             							}
-HXDLIN(  74)							if (_hx_tmp) {
-HXLINE(  75)								if (elemUser) {
-HXLINE(  75)									return ::Math_obj::NEGATIVE_INFINITY;
+HXDLIN(  81)							if (_hx_tmp) {
+HXLINE(  82)								if (elemUser) {
+HXLINE(  82)									return ::Math_obj::NEGATIVE_INFINITY;
             								}
             								else {
-HXLINE(  75)									return ::Math_obj::POSITIVE_INFINITY;
+HXLINE(  82)									return ::Math_obj::POSITIVE_INFINITY;
             								}
             							}
             						}
@@ -176,135 +198,355 @@ HXLINE(  75)									return ::Math_obj::POSITIVE_INFINITY;
             				}
             			}
             		}
-HXLINE(  83)		if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,1)) )->length > 1)) {
-HXLINE(  84)			bool midUser = ( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,1)) )->__get(1).StaticCast<  ::User >()->user;
-HXLINE(  85)			bool _hx_tmp;
-HXDLIN(  85)			bool _hx_tmp1;
-HXDLIN(  85)			bool _hx_tmp2;
-HXDLIN(  85)			if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,0)) )->length > 0)) {
-HXLINE(  85)				_hx_tmp2 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,0)) )->__get(0).StaticCast<  ::User >()->user == midUser);
+HXLINE(  90)		if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,1)) )->length > 1)) {
+HXLINE(  91)			bool midUser = ( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,1)) )->__get(1).StaticCast<  ::User >()->user;
+HXLINE(  92)			bool _hx_tmp;
+HXDLIN(  92)			bool _hx_tmp1;
+HXDLIN(  92)			bool _hx_tmp2;
+HXDLIN(  92)			if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,0)) )->length > 0)) {
+HXLINE(  92)				_hx_tmp2 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,0)) )->__get(0).StaticCast<  ::User >()->user == midUser);
             			}
             			else {
-HXLINE(  85)				_hx_tmp2 = false;
+HXLINE(  92)				_hx_tmp2 = false;
             			}
-HXDLIN(  85)			if (_hx_tmp2) {
-HXLINE(  85)				_hx_tmp1 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,2)) )->length == 3);
-            			}
-            			else {
-HXLINE(  85)				_hx_tmp1 = false;
-            			}
-HXDLIN(  85)			if (_hx_tmp1) {
-HXLINE(  85)				_hx_tmp = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,2)) )->__get(2).StaticCast<  ::User >()->user == midUser);
+HXDLIN(  92)			if (_hx_tmp2) {
+HXLINE(  92)				_hx_tmp1 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,2)) )->length == 3);
             			}
             			else {
-HXLINE(  85)				_hx_tmp = false;
+HXLINE(  92)				_hx_tmp1 = false;
             			}
-HXDLIN(  85)			if (_hx_tmp) {
-HXLINE(  86)				if (midUser) {
-HXLINE(  86)					return ::Math_obj::NEGATIVE_INFINITY;
+HXDLIN(  92)			if (_hx_tmp1) {
+HXLINE(  92)				_hx_tmp = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,2)) )->__get(2).StaticCast<  ::User >()->user == midUser);
+            			}
+            			else {
+HXLINE(  92)				_hx_tmp = false;
+            			}
+HXDLIN(  92)			if (_hx_tmp) {
+HXLINE(  93)				if (midUser) {
+HXLINE(  93)					return ::Math_obj::NEGATIVE_INFINITY;
             				}
             				else {
-HXLINE(  86)					return ::Math_obj::POSITIVE_INFINITY;
+HXLINE(  93)					return ::Math_obj::POSITIVE_INFINITY;
             				}
             			}
-HXLINE(  88)			bool _hx_tmp3;
-HXDLIN(  88)			bool _hx_tmp4;
-HXDLIN(  88)			bool _hx_tmp5;
-HXDLIN(  88)			if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,0)) )->length == 3)) {
-HXLINE(  88)				_hx_tmp5 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,0)) )->__get(2).StaticCast<  ::User >()->user == midUser);
+HXLINE(  95)			bool _hx_tmp3;
+HXDLIN(  95)			bool _hx_tmp4;
+HXDLIN(  95)			bool _hx_tmp5;
+HXDLIN(  95)			if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,0)) )->length == 3)) {
+HXLINE(  95)				_hx_tmp5 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,0)) )->__get(2).StaticCast<  ::User >()->user == midUser);
             			}
             			else {
-HXLINE(  88)				_hx_tmp5 = false;
+HXLINE(  95)				_hx_tmp5 = false;
             			}
-HXDLIN(  88)			if (_hx_tmp5) {
-HXLINE(  88)				_hx_tmp4 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,2)) )->length > 0);
-            			}
-            			else {
-HXLINE(  88)				_hx_tmp4 = false;
-            			}
-HXDLIN(  88)			if (_hx_tmp4) {
-HXLINE(  88)				_hx_tmp3 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,2)) )->__get(0).StaticCast<  ::User >()->user == midUser);
+HXDLIN(  95)			if (_hx_tmp5) {
+HXLINE(  95)				_hx_tmp4 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,2)) )->length > 0);
             			}
             			else {
-HXLINE(  88)				_hx_tmp3 = false;
+HXLINE(  95)				_hx_tmp4 = false;
             			}
-HXDLIN(  88)			if (_hx_tmp3) {
-HXLINE(  89)				if (midUser) {
-HXLINE(  89)					return ::Math_obj::NEGATIVE_INFINITY;
+HXDLIN(  95)			if (_hx_tmp4) {
+HXLINE(  95)				_hx_tmp3 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,2)) )->__get(0).StaticCast<  ::User >()->user == midUser);
+            			}
+            			else {
+HXLINE(  95)				_hx_tmp3 = false;
+            			}
+HXDLIN(  95)			if (_hx_tmp3) {
+HXLINE(  96)				if (midUser) {
+HXLINE(  96)					return ::Math_obj::NEGATIVE_INFINITY;
             				}
             				else {
-HXLINE(  89)					return ::Math_obj::POSITIVE_INFINITY;
+HXLINE(  96)					return ::Math_obj::POSITIVE_INFINITY;
             				}
             			}
             		}
             		else {
-HXLINE(  90)			if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,2)) )->length > 1)) {
-HXLINE(  91)				bool midUser = ( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,2)) )->__get(1).StaticCast<  ::User >()->user;
-HXLINE(  92)				bool _hx_tmp;
-HXDLIN(  92)				bool _hx_tmp1;
-HXDLIN(  92)				bool _hx_tmp2;
-HXDLIN(  92)				if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,1)) )->length > 0)) {
-HXLINE(  92)					_hx_tmp2 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,1)) )->__get(0).StaticCast<  ::User >()->user == midUser);
+HXLINE(  97)			if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,2)) )->length > 1)) {
+HXLINE(  98)				bool midUser = ( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,2)) )->__get(1).StaticCast<  ::User >()->user;
+HXLINE(  99)				bool _hx_tmp;
+HXDLIN(  99)				bool _hx_tmp1;
+HXDLIN(  99)				bool _hx_tmp2;
+HXDLIN(  99)				if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,1)) )->length > 0)) {
+HXLINE(  99)					_hx_tmp2 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,1)) )->__get(0).StaticCast<  ::User >()->user == midUser);
             				}
             				else {
-HXLINE(  92)					_hx_tmp2 = false;
+HXLINE(  99)					_hx_tmp2 = false;
             				}
-HXDLIN(  92)				if (_hx_tmp2) {
-HXLINE(  92)					_hx_tmp1 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,3)) )->length == 3);
-            				}
-            				else {
-HXLINE(  92)					_hx_tmp1 = false;
-            				}
-HXDLIN(  92)				if (_hx_tmp1) {
-HXLINE(  92)					_hx_tmp = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,3)) )->__get(2).StaticCast<  ::User >()->user == midUser);
+HXDLIN(  99)				if (_hx_tmp2) {
+HXLINE(  99)					_hx_tmp1 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,3)) )->length == 3);
             				}
             				else {
-HXLINE(  92)					_hx_tmp = false;
+HXLINE(  99)					_hx_tmp1 = false;
             				}
-HXDLIN(  92)				if (_hx_tmp) {
-HXLINE(  93)					if (midUser) {
-HXLINE(  93)						return ::Math_obj::NEGATIVE_INFINITY;
+HXDLIN(  99)				if (_hx_tmp1) {
+HXLINE(  99)					_hx_tmp = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,3)) )->__get(2).StaticCast<  ::User >()->user == midUser);
+            				}
+            				else {
+HXLINE(  99)					_hx_tmp = false;
+            				}
+HXDLIN(  99)				if (_hx_tmp) {
+HXLINE( 100)					if (midUser) {
+HXLINE( 100)						return ::Math_obj::NEGATIVE_INFINITY;
             					}
             					else {
-HXLINE(  93)						return ::Math_obj::POSITIVE_INFINITY;
+HXLINE( 100)						return ::Math_obj::POSITIVE_INFINITY;
             					}
             				}
-HXLINE(  95)				bool _hx_tmp3;
-HXDLIN(  95)				bool _hx_tmp4;
-HXDLIN(  95)				bool _hx_tmp5;
-HXDLIN(  95)				if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,1)) )->length == 3)) {
-HXLINE(  95)					_hx_tmp5 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,1)) )->__get(2).StaticCast<  ::User >()->user == midUser);
+HXLINE( 102)				bool _hx_tmp3;
+HXDLIN( 102)				bool _hx_tmp4;
+HXDLIN( 102)				bool _hx_tmp5;
+HXDLIN( 102)				if ((( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,1)) )->length == 3)) {
+HXLINE( 102)					_hx_tmp5 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,1)) )->__get(2).StaticCast<  ::User >()->user == midUser);
             				}
             				else {
-HXLINE(  95)					_hx_tmp5 = false;
+HXLINE( 102)					_hx_tmp5 = false;
             				}
-HXDLIN(  95)				if (_hx_tmp5) {
-HXLINE(  95)					_hx_tmp4 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,3)) )->length > 0);
-            				}
-            				else {
-HXLINE(  95)					_hx_tmp4 = false;
-            				}
-HXDLIN(  95)				if (_hx_tmp4) {
-HXLINE(  95)					_hx_tmp3 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,3)) )->__get(0).StaticCast<  ::User >()->user == midUser);
+HXDLIN( 102)				if (_hx_tmp5) {
+HXLINE( 102)					_hx_tmp4 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,3)) )->length > 0);
             				}
             				else {
-HXLINE(  95)					_hx_tmp3 = false;
+HXLINE( 102)					_hx_tmp4 = false;
             				}
-HXDLIN(  95)				if (_hx_tmp3) {
-HXLINE(  96)					if (midUser) {
-HXLINE(  96)						return ::Math_obj::NEGATIVE_INFINITY;
+HXDLIN( 102)				if (_hx_tmp4) {
+HXLINE( 102)					_hx_tmp3 = (( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,3)) )->__get(0).StaticCast<  ::User >()->user == midUser);
+            				}
+            				else {
+HXLINE( 102)					_hx_tmp3 = false;
+            				}
+HXDLIN( 102)				if (_hx_tmp3) {
+HXLINE( 103)					if (midUser) {
+HXLINE( 103)						return ::Math_obj::NEGATIVE_INFINITY;
             					}
             					else {
-HXLINE(  96)						return ::Math_obj::POSITIVE_INFINITY;
+HXLINE( 103)						return ::Math_obj::POSITIVE_INFINITY;
             					}
             				}
             			}
             		}
-HXLINE(  99)		return ( (Float)(-1) );
+HXLINE( 106)		return ( (Float)(-1) );
             	}
 
 
 STATIC_HX_DEFINE_DYNAMIC_FUNC1(MinMax_obj,terminalTest,return )
+
+Float MinMax_obj::heuristic(::Array< ::Dynamic> state){
+            	HX_STACKFRAME(&_hx_pos_0c24820382934f49_109_heuristic)
+HXLINE( 113)		::Array< ::Dynamic> _g = ::Array_obj< ::Dynamic>::__new(0);
+HXDLIN( 113)		{
+HXLINE( 113)			int _g1 = 0;
+HXDLIN( 113)			while((_g1 < state->length)){
+HXLINE( 113)				::Array< ::Dynamic> column = ( (::Array< ::Dynamic>)(_hx_array_unsafe_get(state,_g1)) );
+HXDLIN( 113)				_g1 = (_g1 + 1);
+HXDLIN( 113)				::Array< int > _g2 = ::Array_obj< int >::__new(0);
+HXDLIN( 113)				{
+HXLINE( 113)					int _g3 = 0;
+HXDLIN( 113)					while((_g3 < column->length)){
+HXLINE( 113)						 ::User user = column->__get(_g3).StaticCast<  ::User >();
+HXDLIN( 113)						_g3 = (_g3 + 1);
+HXDLIN( 113)						int _hx_tmp;
+HXDLIN( 113)						if (user->user) {
+HXLINE( 113)							_hx_tmp = 1;
+            						}
+            						else {
+HXLINE( 113)							_hx_tmp = 0;
+            						}
+HXDLIN( 113)						_g2->push(_hx_tmp);
+            					}
+            				}
+HXDLIN( 113)				_g->push(_g2);
+            			}
+            		}
+HXDLIN( 113)		::Array< ::Dynamic> board = _g;
+HXLINE( 114)		{
+HXLINE( 114)			int _g2 = 0;
+HXDLIN( 114)			int _g3 = board->length;
+HXDLIN( 114)			while((_g2 < _g3)){
+HXLINE( 114)				_g2 = (_g2 + 1);
+HXDLIN( 114)				int i = (_g2 - 1);
+HXLINE( 115)				{
+HXLINE( 115)					int _g = board->__get(i).StaticCast< ::Array< int > >()->length;
+HXDLIN( 115)					int _g1 = 3;
+HXDLIN( 115)					while((_g < _g1)){
+HXLINE( 115)						_g = (_g + 1);
+HXDLIN( 115)						int j = (_g - 1);
+HXDLIN( 115)						board->__get(i).StaticCast< ::Array< int > >()->push(-1);
+            					}
+            				}
+            			}
+            		}
+HXLINE( 118)		int aiPoints = 0;
+HXLINE( 120)		{
+HXLINE( 120)			int _g4 = 0;
+HXDLIN( 120)			int _g5 = board->length;
+HXDLIN( 120)			while((_g4 < _g5)){
+HXLINE( 120)				_g4 = (_g4 + 1);
+HXDLIN( 120)				int i = (_g4 - 1);
+HXLINE( 121)				::Array< int > column = board->__get(i).StaticCast< ::Array< int > >()->copy();
+HXLINE( 124)				::Array< int > _g = ::Array_obj< int >::__new(0);
+HXDLIN( 124)				{
+HXLINE( 124)					int _g1 = 0;
+HXDLIN( 124)					::Array< int > _g2 = column;
+HXDLIN( 124)					while((_g1 < _g2->length)){
+HXLINE( 124)						int v = _g2->__get(_g1);
+HXDLIN( 124)						_g1 = (_g1 + 1);
+HXDLIN( 124)						if ((v == 1)) {
+HXLINE( 124)							_g->push(v);
+            						}
+            					}
+            				}
+HXDLIN( 124)				::Array< int > userMoves = _g;
+HXLINE( 125)				::Array< int > _g3 = ::Array_obj< int >::__new(0);
+HXDLIN( 125)				{
+HXLINE( 125)					int _g5 = 0;
+HXDLIN( 125)					::Array< int > _g6 = column;
+HXDLIN( 125)					while((_g5 < _g6->length)){
+HXLINE( 125)						int v = _g6->__get(_g5);
+HXDLIN( 125)						_g5 = (_g5 + 1);
+HXDLIN( 125)						if ((v == 0)) {
+HXLINE( 125)							_g3->push(v);
+            						}
+            					}
+            				}
+HXDLIN( 125)				::Array< int > aiMoves = _g3;
+HXLINE( 126)				bool _hx_tmp;
+HXDLIN( 126)				if ((userMoves->length == 0)) {
+HXLINE( 126)					_hx_tmp = (aiMoves->length > 0);
+            				}
+            				else {
+HXLINE( 126)					_hx_tmp = false;
+            				}
+HXDLIN( 126)				if (_hx_tmp) {
+HXLINE( 126)					aiPoints = (aiPoints + 1);
+            				}
+HXLINE( 127)				bool _hx_tmp1;
+HXDLIN( 127)				if ((userMoves->length > 0)) {
+HXLINE( 127)					_hx_tmp1 = (aiMoves->length == 0);
+            				}
+            				else {
+HXLINE( 127)					_hx_tmp1 = false;
+            				}
+HXDLIN( 127)				if (_hx_tmp1) {
+HXLINE( 127)					aiPoints = (aiPoints - 1);
+            				}
+HXLINE( 130)				if ((i <= 1)) {
+HXLINE( 131)					int _g = 0;
+HXDLIN( 131)					int _g1 = column->length;
+HXDLIN( 131)					while((_g < _g1)){
+HXLINE( 131)						_g = (_g + 1);
+HXDLIN( 131)						int j = (_g - 1);
+HXLINE( 132)						::Array< int > elems = ::Array_obj< int >::__new(3)->init(0,board->__get(i).StaticCast< ::Array< int > >()->__get(j))->init(1,board->__get(i).StaticCast< ::Array< int > >()->__get((j + 1)))->init(2,board->__get(i).StaticCast< ::Array< int > >()->__get((j + 2)));
+HXLINE( 133)						::Array< int > _g1 = ::Array_obj< int >::__new(0);
+HXDLIN( 133)						{
+HXLINE( 133)							int _g2 = 0;
+HXDLIN( 133)							::Array< int > _g3 = elems;
+HXDLIN( 133)							while((_g2 < _g3->length)){
+HXLINE( 133)								int v = _g3->__get(_g2);
+HXDLIN( 133)								_g2 = (_g2 + 1);
+HXDLIN( 133)								if ((v == 1)) {
+HXLINE( 133)									_g1->push(v);
+            								}
+            							}
+            						}
+HXDLIN( 133)						::Array< int > userMoves = _g1;
+HXLINE( 134)						::Array< int > _g4 = ::Array_obj< int >::__new(0);
+HXDLIN( 134)						{
+HXLINE( 134)							int _g5 = 0;
+HXDLIN( 134)							::Array< int > _g6 = elems;
+HXDLIN( 134)							while((_g5 < _g6->length)){
+HXLINE( 134)								int v = _g6->__get(_g5);
+HXDLIN( 134)								_g5 = (_g5 + 1);
+HXDLIN( 134)								if ((v == 0)) {
+HXLINE( 134)									_g4->push(v);
+            								}
+            							}
+            						}
+HXDLIN( 134)						::Array< int > aiMoves = _g4;
+HXLINE( 135)						bool _hx_tmp;
+HXDLIN( 135)						if ((userMoves->length == 0)) {
+HXLINE( 135)							_hx_tmp = (aiMoves->length > 0);
+            						}
+            						else {
+HXLINE( 135)							_hx_tmp = false;
+            						}
+HXDLIN( 135)						if (_hx_tmp) {
+HXLINE( 135)							aiPoints = (aiPoints + 1);
+            						}
+HXLINE( 136)						bool _hx_tmp1;
+HXDLIN( 136)						if ((userMoves->length > 0)) {
+HXLINE( 136)							_hx_tmp1 = (aiMoves->length == 0);
+            						}
+            						else {
+HXLINE( 136)							_hx_tmp1 = false;
+            						}
+HXDLIN( 136)						if (_hx_tmp1) {
+HXLINE( 136)							aiPoints = (aiPoints - 1);
+            						}
+            					}
+            				}
+            			}
+            		}
+HXLINE( 142)		::Array< int > diagPrincipal1 = ::Array_obj< int >::__new(3)->init(0,board->__get(0).StaticCast< ::Array< int > >()->__get(2))->init(1,board->__get(1).StaticCast< ::Array< int > >()->__get(1))->init(2,board->__get(2).StaticCast< ::Array< int > >()->__get(0));
+HXLINE( 143)		::Array< int > diagPrincipal2 = ::Array_obj< int >::__new(3)->init(0,board->__get(1).StaticCast< ::Array< int > >()->__get(2))->init(1,board->__get(2).StaticCast< ::Array< int > >()->__get(1))->init(2,board->__get(3).StaticCast< ::Array< int > >()->__get(0));
+HXLINE( 144)		::Array< int > diagSecundaria1 = ::Array_obj< int >::__new(3)->init(0,board->__get(2).StaticCast< ::Array< int > >()->__get(2))->init(1,board->__get(1).StaticCast< ::Array< int > >()->__get(1))->init(2,board->__get(0).StaticCast< ::Array< int > >()->__get(0));
+HXLINE( 145)		::Array< int > diagSecundaria2 = ::Array_obj< int >::__new(3)->init(0,board->__get(3).StaticCast< ::Array< int > >()->__get(2))->init(1,board->__get(2).StaticCast< ::Array< int > >()->__get(1))->init(2,board->__get(1).StaticCast< ::Array< int > >()->__get(0));
+HXLINE( 147)		::Array< ::Dynamic> allDiags = ::Array_obj< ::Dynamic>::__new(4)->init(0,diagPrincipal1)->init(1,diagPrincipal2)->init(2,diagSecundaria1)->init(3,diagSecundaria2);
+HXLINE( 148)		{
+HXLINE( 148)			int _g6 = 0;
+HXDLIN( 148)			while((_g6 < allDiags->length)){
+HXLINE( 148)				::Array< int > diag = allDiags->__get(_g6).StaticCast< ::Array< int > >();
+HXDLIN( 148)				_g6 = (_g6 + 1);
+HXLINE( 149)				::Array< int > _g = ::Array_obj< int >::__new(0);
+HXDLIN( 149)				{
+HXLINE( 149)					int _g1 = 0;
+HXDLIN( 149)					::Array< int > _g2 = diag;
+HXDLIN( 149)					while((_g1 < _g2->length)){
+HXLINE( 149)						int v = _g2->__get(_g1);
+HXDLIN( 149)						_g1 = (_g1 + 1);
+HXDLIN( 149)						if ((v == 1)) {
+HXLINE( 149)							_g->push(v);
+            						}
+            					}
+            				}
+HXDLIN( 149)				::Array< int > userMoves = _g;
+HXLINE( 150)				::Array< int > _g3 = ::Array_obj< int >::__new(0);
+HXDLIN( 150)				{
+HXLINE( 150)					int _g4 = 0;
+HXDLIN( 150)					::Array< int > _g5 = diag;
+HXDLIN( 150)					while((_g4 < _g5->length)){
+HXLINE( 150)						int v = _g5->__get(_g4);
+HXDLIN( 150)						_g4 = (_g4 + 1);
+HXDLIN( 150)						if ((v == 0)) {
+HXLINE( 150)							_g3->push(v);
+            						}
+            					}
+            				}
+HXDLIN( 150)				::Array< int > aiMoves = _g3;
+HXLINE( 151)				bool _hx_tmp;
+HXDLIN( 151)				if ((userMoves->length == 0)) {
+HXLINE( 151)					_hx_tmp = (aiMoves->length > 0);
+            				}
+            				else {
+HXLINE( 151)					_hx_tmp = false;
+            				}
+HXDLIN( 151)				if (_hx_tmp) {
+HXLINE( 151)					aiPoints = (aiPoints + 1);
+            				}
+HXLINE( 152)				bool _hx_tmp1;
+HXDLIN( 152)				if ((userMoves->length > 0)) {
+HXLINE( 152)					_hx_tmp1 = (aiMoves->length == 0);
+            				}
+            				else {
+HXLINE( 152)					_hx_tmp1 = false;
+            				}
+HXDLIN( 152)				if (_hx_tmp1) {
+HXLINE( 152)					aiPoints = (aiPoints - 1);
+            				}
+            			}
+            		}
+HXLINE( 155)		return ( (Float)(aiPoints) );
+            	}
+
+
+STATIC_HX_DEFINE_DYNAMIC_FUNC1(MinMax_obj,heuristic,return )
 
 
 MinMax_obj::MinMax_obj()
@@ -317,6 +559,9 @@ bool MinMax_obj::__GetStatic(const ::String &inName, Dynamic &outValue, ::hx::Pr
 	case 8:
 		if (HX_FIELD_EQ(inName,"maxValue") ) { outValue = maxValue_dyn(); return true; }
 		if (HX_FIELD_EQ(inName,"minValue") ) { outValue = minValue_dyn(); return true; }
+		break;
+	case 9:
+		if (HX_FIELD_EQ(inName,"heuristic") ) { outValue = heuristic_dyn(); return true; }
 		break;
 	case 12:
 		if (HX_FIELD_EQ(inName,"terminalTest") ) { outValue = terminalTest_dyn(); return true; }
@@ -339,6 +584,7 @@ static ::String MinMax_obj_sStaticFields[] = {
 	HX_("maxValue",2d,d2,d5,db),
 	HX_("minValue",7f,ec,ef,28),
 	HX_("terminalTest",ee,83,12,98),
+	HX_("heuristic",ca,ea,66,9a),
 	::String(null())
 };
 

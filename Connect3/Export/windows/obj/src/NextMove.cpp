@@ -5,12 +5,12 @@
 #include <NextMove.h>
 #endif
 
-HX_DEFINE_STACK_FRAME(_hx_pos_b2de0c04482600c2_107_new,"NextMove","new",0x48ab18b6,"NextMove.new","MinMax.hx",107,0xb95455ac)
+HX_DEFINE_STACK_FRAME(_hx_pos_b2de0c04482600c2_163_new,"NextMove","new",0x48ab18b6,"NextMove.new","MinMax.hx",163,0xb95455ac)
 
 void NextMove_obj::__construct(int column,Float value){
-            	HX_STACKFRAME(&_hx_pos_b2de0c04482600c2_107_new)
-HXLINE( 108)		this->column = column;
-HXLINE( 109)		this->value = value;
+            	HX_STACKFRAME(&_hx_pos_b2de0c04482600c2_163_new)
+HXLINE( 164)		this->column = column;
+HXLINE( 165)		this->value = value;
             	}
 
 Dynamic NextMove_obj::__CreateEmpty() { return new NextMove_obj; }
